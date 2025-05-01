@@ -1,0 +1,38 @@
+#ЗадачаB из контеста(Не знаю надо ли это было добавлять но мне не сложно)
+n, m = map(int, input().split())
+g = [[] for _ in range(n + 1)]
+d = [0] * (n + 1)
+for _ in range(m):
+    u, v = map(int, input().split())
+    g[u].append(v)
+    d[v] += 1
+v = [False] * (n + 1)
+s = [False] * (n + 1)
+def f(u):
+    v[u] = s[u] = True
+    for x in g[u]:
+        if not v[x] and f(x):
+            return True
+        elif s[x]:
+            return True
+    s[u] = False
+    return False
+c = False
+for i in range(1, n + 1):
+    if not v[i] and f(i):
+        c = True
+        break
+if c:
+    print(-1)
+else:
+    q = [i for i in range(1, n + 1) if d[i] == 0]
+    u = True
+    while q:
+        if len(q) > 1:
+            u = False
+        x = q.pop(0)
+        for y in g[x]:
+            d[y] -= 1
+            if d[y] == 0:
+                q.append(y)
+    print("YES" if u else "NO")
