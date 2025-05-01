@@ -1,0 +1,44 @@
+from collections import deque
+
+#задача со скриношота в тг
+def f(n, d):
+    g = [[] for _ in range(n + 1)]
+    for a, b in d:
+        g[a].append(b)
+        g[b].append(a)
+
+    c = [0] * (n + 1)
+
+    for p in range(1, n + 1):
+        if c[p] == 0:
+            q = deque([p])
+            c[p] = 1
+            while q:
+                u = q.popleft()
+                for v in g[u]:
+                    if c[v] == 0:
+                        c[v] = 3 - c[u]
+                        q.append(v)
+                    elif c[v] == c[u]:
+                        return False
+    return True
+
+#Задача из конца 3 семинара
+def ff(n, e):
+    g = [[] for _ in range(n)]
+    for u, v in e:
+        g[v].append(u)
+
+    r = [[] for i in range(n)]
+
+    def d(n, c):
+        for a in g[n]:
+            if a not in r[c]:
+                r[c].append(a)
+                d(a, c)
+
+    for i in range(n):
+        d(i, i)
+        r[i].sort()
+
+    return r
